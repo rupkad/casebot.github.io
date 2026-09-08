@@ -41,10 +41,15 @@
       background: #0f172a;
       border-radius: 12px;
       padding: 18px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
       font-size: 0.95rem;
       line-height: 1.6;
       color: #cbd5e1;
+    }
+
+    #botName {
+      color: #4ade80;
+      font-weight: 600;
     }
 
     #endBtn {
@@ -58,7 +63,6 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 10px;
-      transition: background 0.2s;
     }
 
     #endBtn:hover {
@@ -79,29 +83,43 @@
     <p class="subtitle">Russian Cold Call Practice</p>
 
     <div class="info">
-      1. Click the round button in the <strong>bottom-right corner</strong> to start the call.<br><br>
-      2. When you want to finish, click the red button below.
+      Current scenario: <span id="botName">Loading...</span><br><br>
+      Click the round button in the bottom-right corner to start the call.
     </div>
 
     <button id="endBtn" onclick="endCall()">End Call</button>
 
     <p class="hint">
-      After ending the call, the transcript will appear in<br>
+      After the call ends, the transcript will appear in<br>
       Vapi Dashboard → Calls
     </p>
   </div>
 
   <script>
     // ==============================
-    //   PASTE YOUR KEYS HERE
+    //   CONFIGURE YOUR BOTS HERE
     // ==============================
     const PUBLIC_KEY = "ee1409e8-23fc-49de-92e3-44d87fd4b0a9";
-    const ASSISTANT_ID = "ffde03c1-b7cd-4523-b7fc-e70bd79f2521";
+
+    // Add as many assistants as you want
+    const BOTS = [
+      {
+        id: "f5886449-75a3-4570-808e-43410ca11922",
+        name: "Easy Buyer – Friendly"
+      },
+      {
+        id: "ffde03c1-b7cd-4523-b7fc-e70bd79f2521",
+        name: "Medium Buyer – Skeptical"
+      }
+    ];
     // ==============================
 
+    // Randomly choose one bot
+    const selectedBot = BOTS[Math.floor(Math.random() * BOTS.length)];
+    document.getElementById('botName').textContent = selectedBot.name;
+
     function endCall() {
-      // Fully stops the call by reloading the page
-      location.reload();
+      location.reload(); // ends the call and chooses a new random bot next time
     }
 
     (function (d, t) {
@@ -115,7 +133,7 @@
       g.onload = function () {
         window.vapiSDK.run({
           apiKey: PUBLIC_KEY,
-          assistant: ASSISTANT_ID
+          assistant: selectedBot.id
         });
       };
     })(document, "script");
